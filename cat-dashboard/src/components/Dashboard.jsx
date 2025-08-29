@@ -165,9 +165,7 @@ const Dashboard = () => {
           <button
             className="bg-green-400 hover:bg-green-500 text-black font-bold py-2 px-6 rounded-lg shadow transition text-lg mt-4 md:mt-8"
             onClick={async () => {
-              const reqText = `${machineType}${
-                specs ? ` with ${specs}` : ""
-              }.`;
+              const reqText = `${machineType}${specs ? ` with ${specs}` : ""}.`;
               setUserRequirement(reqText);
               setApiResult(null);
               setApiError("");
