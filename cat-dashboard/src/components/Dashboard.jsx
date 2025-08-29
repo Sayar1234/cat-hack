@@ -110,15 +110,7 @@ const Dashboard = () => {
 
   return (
     <div className="min-h-screen font-sans bg-gradient-to-br from-[#e0e7ff] via-[#f0fdfa] to-[#f9fafb] p-6 md:p-12">
-      {/* Top right dummy buttons */}
-      <div className="flex justify-end mb-2">
-        <button className="bg-yellow-400 hover:bg-yellow-500 text-black font-bold py-2 px-6 rounded-lg shadow mr-2 transition">
-          Check-In
-        </button>
-        <button className="bg-black hover:bg-gray-800 text-yellow-400 font-bold py-2 px-6 rounded-lg shadow transition">
-          Check-Out
-        </button>
-      </div>
+      
       <h1 className="text-5xl font-extrabold mb-10 text-transparent bg-clip-text bg-gradient-to-r from-indigo-500 via-sky-500 to-emerald-400 drop-shadow-lg tracking-tight text-center">
         🚜 Telematics Dashboard
       </h1>
