@@ -19,6 +19,9 @@ const Dashboard = () => {
   const [machineType, setMachineType] = useState("");
   const [specs, setSpecs] = useState("");
   const [userRequirement, setUserRequirement] = useState("");
+  const [apiResult, setApiResult] = useState(null);
+  const [apiLoading, setApiLoading] = useState(false);
+  const [apiError, setApiError] = useState("");
 
   // Fetch data from backend API
   const fetchExcel = () => {
@@ -161,11 +164,32 @@ const Dashboard = () => {
           </div>
           <button
             className="bg-green-400 hover:bg-green-500 text-black font-bold py-2 px-6 rounded-lg shadow transition text-lg mt-4 md:mt-8"
-            onClick={() =>
-              setUserRequirement(
-                `User needs a ${machineType}${specs ? ` with ${specs}` : ""}.`
-              )
-            }
+            onClick={async () => {
+              const reqText = `${machineType}${
+                specs ? ` with ${specs}` : ""
+              }.`;
+              setUserRequirement(reqText);
+              setApiResult(null);
+              setApiError("");
+              setApiLoading(true);
+              try {
+                const response = await fetch(
+                  "https://machine-recommender-api-4.onrender.com",
+                  {
+                    method: "POST",
+                    headers: { "Content-Type": "application/json" },
+                    body: JSON.stringify({ requirement: reqText }),
+                  }
+                );
+                if (!response.ok) throw new Error("API error");
+                const data = await response.json();
+                setApiResult(data);
+              } catch (err) {
+                setApiError("Could not fetch recommendation.", err.message);
+              } finally {
+                setApiLoading(false);
+              }
+            }}
             disabled={!machineType}
           >
             Save Requirement
@@ -174,6 +198,20 @@ const Dashboard = () => {
         {userRequirement && (
           <div className="mt-6 text-lg text-gray-800 font-medium bg-white/80 rounded-xl px-6 py-4 border border-green-300 shadow">
             {userRequirement}
+          </div>
+        )}
+        {/* API result display */}
+        {apiLoading && (
+          <div className="mt-4 text-blue-600">Loading recommendation...</div>
+        )}
+        {apiError && <div className="mt-4 text-red-600">{apiError}</div>}
+        {apiResult && (
+          <div className="mt-4 text-base text-gray-900 bg-white/90 rounded-xl px-6 py-4 border border-blue-300 shadow">
+            <pre className="whitespace-pre-wrap break-words">
+              {typeof apiResult === "object"
+                ? JSON.stringify(apiResult, null, 2)
+                : String(apiResult)}
+            </pre>
           </div>
         )}
       </section>
